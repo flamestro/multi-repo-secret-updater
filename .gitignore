@@ -1,0 +1,7 @@
+.idea
+node_modules
+actor.json
+repositories.json
+secrets.json
+yarn-error.log
+index.js
