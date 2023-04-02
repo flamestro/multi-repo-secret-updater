@@ -58,8 +58,6 @@ const publishSecret = async (actor: Actor, repository: Repository) => {
 
     for (const secret of repository.secrets) {
         secret.encryptedValue = await buildEncryptedSecret(secret, repository.publicKey)
-    }
-    for (const secret of repository.secrets) {
         await octokit.request(`PUT /repos/${repository.owner}/${repository.name}/actions/secrets/${secret.name}`, {
             owner: repository.owner,
             repo: repository.name,
@@ -109,7 +107,8 @@ configRepositories.forEach(configRepository => {
         publicKey: undefined,
         secrets: secrets
     }
-    publishSecret(actor, repository).then(_ => console.log("Successfully updated repos")).catch((err) => {
-        console.error(`something went wrong ${JSON.stringify(err)}`)
+    publishSecret(actor, repository)
+        .then(_ => console.log(`Successfully updated repo ${configRepository.owner}/${configRepository.name}`))
+        .catch(_ => {console.error(`something went wrong with ${configRepository.owner}/${configRepository.name}`)
     })
 })
