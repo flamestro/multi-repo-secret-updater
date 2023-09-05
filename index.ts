@@ -58,7 +58,7 @@ const publishSecret = async (actor: Actor, repository: Repository) => {
 
     for (const secret of repository.secrets) {
         secret.encryptedValue = await buildEncryptedSecret(secret, repository.publicKey)
-        await octokit.request(`PUT /repos/${repository.owner}/${repository.name}/actions/secrets/${secret.name}`, {
+        const response = await octokit.request(`PUT /repos/${repository.owner}/${repository.name}/actions/secrets/${secret.name}`, {
             owner: repository.owner,
             repo: repository.name,
             secret_name: secret,
@@ -68,6 +68,7 @@ const publishSecret = async (actor: Actor, repository: Repository) => {
                 'X-GitHub-Api-Version': '2022-11-28'
             }
         })
+        console.log(`Updated ${repository.owner}/${repository.name} ${secret.name} with response ${response.status}`)
     }
 }
 
